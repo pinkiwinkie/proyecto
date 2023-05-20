@@ -7,6 +7,9 @@ import javax.sql.DataSource;
 public class Conector {
     public static DataSource getMySql(){
         MysqlDataSource mysqlDataSource = new MysqlDataSource();
+        mysqlDataSource.setUrl("jdbc:mysql://192.168.1.25:3306/java");
+        mysqlDataSource.setUser("helena");
+        mysqlDataSource.setPassword("1234");
         return mysqlDataSource;
     }
 }
