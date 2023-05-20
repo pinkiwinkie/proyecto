@@ -29,10 +29,10 @@ public class UsuarioController {
         }
     }
     @PostMapping("/usuariosdb/")
-    public ResponseEntity<?> addUsuario(@RequestBody Usuario usuario) throws SQLException {
+    public ResponseEntity<?> addUsuario(@RequestBody Usuario usuario) {
         boolean b = service.addUsuario(usuario); //solo lo mandas
         if (!b)
             return new ResponseEntity<>("No se pudo insertar", HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(b, HttpStatus.OK);
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
 }

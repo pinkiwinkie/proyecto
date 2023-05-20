@@ -11,11 +11,10 @@ import java.util.Objects;
 @ToString
 @Builder
 public class Usuario {
-    private int id,
-            idOficio;
+    private int id;
     private String name,
                 lastName;
-
+    private int idOficio;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -5,10 +5,7 @@ import com.proyectofinal.proyecto.repository.model.Usuario;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,8 +16,17 @@ public class UsuarioRepository implements IUsuarioRepository{
     public boolean addUsuario(Usuario usuario) {
         boolean insert = false;
         DataSource dataSource = Conector.getMySql();
-        String query = "{ call insertarCliente(?,?,?,?,?,?,?,?,?) };";
-        return false;
+        String query = "{ call crear_usuario(?,?,?,?,?) };";
+        try(Connection connection = dataSource.getConnection();
+            CallableStatement callableStatement = connection.prepareCall(query)
+        ){
+            callableStatement.setInt(2,usuario.getId());
+            callableStatement.setString(3, usuario.getName());
+            callableStatement.setString(4, usuario.getLastName());
+            callableStatement.setInt(5,usuario.getIdOficio());
+            insert = callableStatement.executeUpdate() == 1;
+        }catch (SQLException e) { e.printStackTrace(); }
+        return insert;
     }
 
     @Override
