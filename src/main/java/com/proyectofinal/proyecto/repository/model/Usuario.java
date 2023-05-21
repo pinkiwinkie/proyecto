@@ -1,7 +1,6 @@
 package com.proyectofinal.proyecto.repository.model;
 
 import lombok.*;
-
 import java.util.Objects;
 
 @Getter

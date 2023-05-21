@@ -1,13 +1,14 @@
 package com.proyectofinal.proyecto.repository;
 
 import com.proyectofinal.proyecto.repository.model.Conector;
+import com.proyectofinal.proyecto.repository.model.Oficio;
 import com.proyectofinal.proyecto.repository.model.Usuario;
 import org.springframework.stereotype.Repository;
-
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UsuarioRepository implements IUsuarioRepository{
@@ -35,13 +36,21 @@ public class UsuarioRepository implements IUsuarioRepository{
     }
 
     @Override
-    public boolean deleteUsuario(int id) {
-        return false;
-    }
-
-    @Override
-    public Usuario getUsuarioById(int id) {
-        return null;
+    public int deleteUsuario(int id) {
+        int deleted = 0;
+        boolean result = false;
+        DataSource dataSource = Conector.getMySql();
+        String query = "{ ? = call eliminar_usuario(?) }";
+        try (Connection connection = dataSource.getConnection();
+             CallableStatement callableStatement = connection.prepareCall(query)) {
+            callableStatement.registerOutParameter(1, Types.INTEGER);
+            callableStatement.setInt(2, id);
+            callableStatement.executeUpdate();
+            deleted = callableStatement.getInt(1);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return deleted;
     }
 
     @Override
@@ -57,7 +66,11 @@ public class UsuarioRepository implements IUsuarioRepository{
                 usuariosDB.add(Usuario.builder().id(rs.getInt(1)).name(rs.getString(2)).lastName(rs.getString(3)).idOficio(rs.getInt(4)).build());
             }
         }
-
         return usuariosDB;
+    }
+
+    @Override
+    public List<Oficio> getAllOficios() throws SQLException {
+        return null;
     }
 }

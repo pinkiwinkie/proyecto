@@ -4,7 +4,6 @@ import com.proyectofinal.proyecto.repository.UsuarioRepository;
 import com.proyectofinal.proyecto.repository.model.Usuario;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -19,5 +18,9 @@ public class UsuarioService {
 
     public boolean addUsuario(Usuario usuario) {
         return repository.addUsuario(usuario);
+    }
+
+    public int deleteUsuario(int id) {
+        return repository.deleteUsuario(id);
     }
 }
