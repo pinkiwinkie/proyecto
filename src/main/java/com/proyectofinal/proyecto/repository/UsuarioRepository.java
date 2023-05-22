@@ -86,9 +86,4 @@ public class UsuarioRepository implements IUsuarioRepository {
         }
         return usuariosDB;
     }
-
-    @Override
-    public List<Oficio> getAllOficios() throws SQLException {
-        return null;
-    }
 }
