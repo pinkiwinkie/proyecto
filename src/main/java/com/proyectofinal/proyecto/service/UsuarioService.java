@@ -23,4 +23,8 @@ public class UsuarioService {
     public int deleteUsuario(int id) {
         return repository.deleteUsuario(id);
     }
+
+    public int updateUsuario(Usuario usuario) {
+        return repository.updateUsuario(usuario);
+    }
 }

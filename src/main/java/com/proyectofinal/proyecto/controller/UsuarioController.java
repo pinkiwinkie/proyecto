@@ -40,6 +40,14 @@ public class UsuarioController {
         int i = service.deleteUsuario(id);
         if (i == 0)
             return new ResponseEntity<>("No se pudo eliminar", HttpStatus.NOT_FOUND);
-        return new ResponseEntity<>(true,HttpStatus.OK);
+        return new ResponseEntity<>(i,HttpStatus.OK);
+    }
+
+    @PutMapping("/usuariosdb/")
+    public ResponseEntity<?> updateUsuario(@RequestBody Usuario usuario){
+        int i = service.updateUsuario(usuario);
+        if (i == 0)
+            return new ResponseEntity<>("No se pudo actualizar", HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(i, HttpStatus.OK);
     }
 }
