@@ -15,20 +15,19 @@ import java.util.Optional;
 public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
-    public boolean addUsuario(Usuario usuario) {
+    public boolean addUsuario(Usuario usuario) throws SQLException{
         boolean insert = false;
         DataSource dataSource = Conector.getMySql();
         String query = "{ call crear_usuario(?,?,?,?,?) };";
         try (Connection connection = dataSource.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
+            callableStatement.registerOutParameter(1,Types.INTEGER);
             callableStatement.setInt(2, usuario.getId());
             callableStatement.setString(3, usuario.getName());
             callableStatement.setString(4, usuario.getLastName());
             callableStatement.setInt(5, usuario.getIdOficio());
             insert = callableStatement.executeUpdate() == 1;
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return insert;
     }

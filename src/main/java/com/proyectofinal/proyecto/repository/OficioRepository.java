@@ -5,10 +5,7 @@ import com.proyectofinal.proyecto.repository.model.Oficio;
 import com.proyectofinal.proyecto.repository.model.Usuario;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +17,9 @@ public class OficioRepository implements IOficioRepository{
         String query = "{ ? = call obtener_oficios(?)}";
 
         try (Connection connection = Conector.getMySql().getConnection();
-             Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(query)
+             CallableStatement callableStatement = connection.prepareCall(query)
         ) {
-            while (rs.next()) {
-               // oficiosDB.add();
-            }
+            callableStatement.registerOutParameter(1, Types.INTEGER);
         }
         return oficiosDB;
     }

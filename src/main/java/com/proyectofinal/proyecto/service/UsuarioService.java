@@ -16,7 +16,7 @@ public class UsuarioService {
         return repository.getAllUsuarios();
     }
 
-    public boolean addUsuario(Usuario usuario) {
+    public boolean addUsuario(Usuario usuario) throws SQLException {
         return repository.addUsuario(usuario);
     }
 
