@@ -12,7 +12,7 @@ import java.util.List;
 @Service
 public class OficioService {
     @Autowired
-    public OficioRepository repository;
+    public OficioRepository repository ;
     public List<Oficio> getAllOficios() throws SQLException {
         return repository.getAllOficios();
     }

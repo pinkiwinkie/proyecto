@@ -16,15 +16,15 @@ public class UsuarioService {
         return repository.getAllUsuarios();
     }
 
-    public boolean addUsuario(Usuario usuario) throws SQLException {
+    public Usuario addUsuario(Usuario usuario) throws SQLException {
         return repository.addUsuario(usuario);
     }
 
-    public int deleteUsuario(int id) {
+    public Usuario deleteUsuario(int id) throws SQLException {
         return repository.deleteUsuario(id);
     }
 
-    public int updateUsuario(Usuario usuario) {
+    public Usuario updateUsuario(Usuario usuario) throws SQLException {
         return repository.updateUsuario(usuario);
     }
 }

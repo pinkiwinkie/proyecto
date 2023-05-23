@@ -15,7 +15,7 @@ import java.util.Optional;
 public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
-    public boolean addUsuario(Usuario usuario) throws SQLException{
+    public Usuario addUsuario(Usuario usuario) throws SQLException{
         boolean insert = false;
         DataSource dataSource = Conector.getMySql();
         String query = "{ call crear_usuario(?,?,?,?,?) };";
@@ -33,7 +33,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     }
 
     @Override
-    public int updateUsuario(Usuario usuario) {
+    public Usuario updateUsuario(Usuario usuario)  throws SQLException{
         int actualizado = 0;
         DataSource dataSource = Conector.getMySql();
         String query = "{ ? = call actualizar_usuario(?,?,?,?)}";
@@ -46,14 +46,12 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.setString(4, usuario.getLastName());
             callableStatement.setInt(5, usuario.getIdOficio());
             actualizado = callableStatement.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return actualizado;
     }
 
     @Override
-    public int deleteUsuario(int id) {
+    public Usuario deleteUsuario(int id)  throws SQLException{
         int deleted = 0;
 
         DataSource dataSource = Conector.getMySql();
@@ -64,21 +62,19 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.registerOutParameter(1, Types.INTEGER);
             callableStatement.setInt(2, id);
             deleted = callableStatement.executeUpdate();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
         }
         return deleted;
     }
 
-    @Override // cambiarlo a callable
+    @Override
     public List<Usuario> getAllUsuarios() throws SQLException {
         ArrayList<Usuario> usuariosDB = new ArrayList<>();
-        String query = "SELECT * FROM Usuario";
+        String query = "{ call obtener_usuarios() }";
 
         try (Connection connection = Conector.getMySql().getConnection();
-             Statement st = connection.createStatement();
-             ResultSet rs = st.executeQuery(query)
+             CallableStatement callableStatement = connection.prepareCall(query)
         ) {
+            ResultSet rs = callableStatement.executeQuery();
             while (rs.next()) {
                 usuariosDB.add(Usuario.builder().id(rs.getInt(1)).name(rs.getString(2)).lastName(rs.getString(3)).idOficio(rs.getInt(4)).build());
             }
