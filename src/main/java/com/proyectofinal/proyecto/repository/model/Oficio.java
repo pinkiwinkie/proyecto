@@ -3,6 +3,7 @@ package com.proyectofinal.proyecto.repository.model;
 import com.mysql.cj.jdbc.Blob;
 import lombok.*;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
@@ -11,7 +12,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Builder
-public class Oficio {
+public class Oficio implements Serializable {
     private int id;
     private String description,
             imageUrl;

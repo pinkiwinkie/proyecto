@@ -16,9 +16,10 @@ public class UsuarioRepository implements IUsuarioRepository {
 
     @Override
     public Usuario addUsuario(Usuario usuario) throws SQLException{
-        boolean insert = false;
+
         DataSource dataSource = Conector.getMySql();
         String query = "{ call crear_usuario(?,?,?,?,?) };";
+        Usuario user;
         try (Connection connection = dataSource.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
@@ -27,16 +28,19 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.setString(3, usuario.getName());
             callableStatement.setString(4, usuario.getLastName());
             callableStatement.setInt(5, usuario.getIdOficio());
-            insert = callableStatement.executeUpdate() == 1;
+            callableStatement.execute();
+
+            user = Usuario.builder().id(callableStatement.getInt(1)).name(usuario.getName()).
+                    lastName(usuario.getLastName()).idOficio(usuario.getIdOficio()).build();
         }
-        return insert;
+        return user;
     }
 
     @Override
     public Usuario updateUsuario(Usuario usuario)  throws SQLException{
-        int actualizado = 0;
         DataSource dataSource = Conector.getMySql();
         String query = "{ ? = call actualizar_usuario(?,?,?,?)}";
+        Usuario user;
         try (Connection connection = dataSource.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
@@ -45,25 +49,27 @@ public class UsuarioRepository implements IUsuarioRepository {
             callableStatement.setString(3, usuario.getName());
             callableStatement.setString(4, usuario.getLastName());
             callableStatement.setInt(5, usuario.getIdOficio());
-            actualizado = callableStatement.executeUpdate();
+            callableStatement.execute();
+            user = Usuario.builder().id(callableStatement.getInt(1)).name(usuario.getName()).
+                    lastName(usuario.getLastName()).idOficio(usuario.getIdOficio()).build();
         }
-        return actualizado;
+        return user;
     }
 
     @Override
     public Usuario deleteUsuario(int id)  throws SQLException{
-        int deleted = 0;
-
         DataSource dataSource = Conector.getMySql();
         String query = "{ ? = call eliminar_usuario(?) }";
+        Usuario user = null;
         try (Connection connection = dataSource.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
             callableStatement.registerOutParameter(1, Types.INTEGER);
             callableStatement.setInt(2, id);
-            deleted = callableStatement.executeUpdate();
+            user = getUserById(id);
+            callableStatement.execute();
         }
-        return deleted;
+        return user;
     }
 
     @Override
@@ -80,5 +86,22 @@ public class UsuarioRepository implements IUsuarioRepository {
             }
         }
         return usuariosDB;
+    }
+
+    private Usuario getUserById(int id)throws SQLException{
+        Usuario usuario = null;
+        DataSource ds = Conector.getMySql();
+        String query = "SELECT * FROM Usuario where idUsuario = ?";
+        try (Connection connection = ds.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)
+        ){
+            preparedStatement.setInt(1, id);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            while (resultSet.next()) {
+                usuario = Usuario.builder().id(resultSet.getInt(1)).name(resultSet.getString(2)).
+                        lastName(resultSet.getString(3)).idOficio(resultSet.getInt(4)).build();
+            }
+        }
+        return usuario;
     }
 }
