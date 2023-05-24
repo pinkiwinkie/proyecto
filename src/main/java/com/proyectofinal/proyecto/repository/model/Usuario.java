@@ -1,6 +1,8 @@
 package com.proyectofinal.proyecto.repository.model;
 
 import lombok.*;
+
+import java.io.Serializable;
 import java.util.Objects;
 
 @Getter
@@ -9,7 +11,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @ToString
 @Builder
-public class Usuario {
+public class Usuario implements Serializable {
     private int id;
     private String name,
                 lastName;

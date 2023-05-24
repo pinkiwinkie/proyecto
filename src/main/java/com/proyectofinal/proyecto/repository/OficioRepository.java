@@ -22,7 +22,7 @@ public class OficioRepository implements IOficioRepository{
             callableStatement.setNull(1,0);
             ResultSet rs = callableStatement.executeQuery();
             while (rs.next()) {
-                oficiosDB.add(Oficio.builder().id(rs.getInt(1)).description(rs.getString(2)).build());
+                oficiosDB.add(Oficio.builder().id(rs.getInt(1)).description(rs.getString(2)).imageUrl(rs.getString(4)).build());
             }
         }
         return oficiosDB;
