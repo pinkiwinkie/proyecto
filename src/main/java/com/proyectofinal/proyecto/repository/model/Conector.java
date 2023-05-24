@@ -12,7 +12,7 @@ public class Conector {
 //        mysqlDataSource.setPassword("1234");
         mysqlDataSource.setUrl("jdbc:mysql://localhost:3306/java");
         mysqlDataSource.setUser("root");
-        mysqlDataSource.setPassword("1234");
+        mysqlDataSource.setPassword("");
         return mysqlDataSource;
     }
 }
