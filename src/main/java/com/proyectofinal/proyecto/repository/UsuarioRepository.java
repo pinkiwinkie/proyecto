@@ -24,13 +24,16 @@ public class UsuarioRepository implements IUsuarioRepository {
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
             callableStatement.registerOutParameter(1,Types.INTEGER);
-            callableStatement.setInt(2, usuario.getId());
+//            callableStatement.setInt(2, usuario.getId());
+            callableStatement.setNull(2, Types.INTEGER);
             callableStatement.setString(3, usuario.getName());
             callableStatement.setString(4, usuario.getLastName());
             callableStatement.setInt(5, usuario.getIdOficio());
             callableStatement.execute();
 
-            user = Usuario.builder().id(callableStatement.getInt(1)).name(usuario.getName()).
+            usuario.setId(callableStatement.getInt(1));
+
+            user = Usuario.builder().id(usuario.getId()).name(usuario.getName()).
                     lastName(usuario.getLastName()).idOficio(usuario.getIdOficio()).build();
         }
         return user;
