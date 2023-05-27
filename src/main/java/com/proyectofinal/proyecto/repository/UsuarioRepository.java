@@ -63,7 +63,7 @@ public class UsuarioRepository implements IUsuarioRepository {
     public Usuario deleteUsuario(int id)  throws SQLException{
         DataSource dataSource = Conector.getMySql();
         String query = "{ ? = call eliminar_usuario(?) }";
-        Usuario user = null;
+        Usuario user;
         try (Connection connection = dataSource.getConnection();
              CallableStatement callableStatement = connection.prepareCall(query)
         ) {
